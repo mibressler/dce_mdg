@@ -110,7 +110,7 @@ const forbidden_level_pairs = [
   <UTable :rows="items" :columns="columns">
     <template #attribute-data="{ row }">
       <span :class="row.attribute.class" class="flex items-center">
-        <UIcon :name="row.attribute.icon" class="w-5 h-5 mr-2" /> <!-- Displaying the Nuxt UI icon -->
+        <UIcon :name="row.attribute.icon" class="w-5 h-5 mr-2" /> 
         <span>{{ row.attribute.value }}</span>
       </span>
     </template>
