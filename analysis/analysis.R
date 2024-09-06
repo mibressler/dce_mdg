@@ -386,35 +386,23 @@ ggplot(attribute_importance, aes(x = "", y = Importance_percent, fill = Attribut
 # ----     Computing Marginal Rate of Substitution              ----
 # ----------------------------------------------------------------- #
 
-# Compute the VTT per hour for integrated and multiple route planners
-# Since there is no cost variable, we'll assume b_tt represents the impact of time directly.
-
-# Given that b_tt might reflect disutility per minute, we convert this to an hourly basis
 VTT_integrated = 60 * abs(model$estimate[["b_tt"]]) / abs(model$estimate[["b_experience"]])
 VTT_multiple = 60 * abs(model$estimate[["b_tt"]]) / abs(model$estimate[["b_experience"]])
 
-# The result reflects how much utility is lost per hour of travel time relative to the impact of experience.
 
-# Display the VTT values
 VTT_integrated
 VTT_multiple
 
-# Compute the MRS between travel time and data sharing
+# MRS between travel time and data sharing
 MRS_anon = model$estimate[["b_tt"]] / model$estimate[["b_data_anon"]]
 MRS_realtime = model$estimate[["b_tt"]] / model$estimate[["b_data_realtime"]]
-
-# Display the MRS values
 cat("MRS between Travel Time and Anonymized Data Sharing:", MRS_anon, "\n")
 cat("MRS between Travel Time and Real-Time Data Sharing:", MRS_realtime, "\n")
 
-# Calculate the Value of Travel Time (VTT) equivalent in terms of minutes for real-time data sharing
+# Value of Travel Time (VTT) equivalent in terms of minutes for real-time data sharing
 VTT_realtime_in_minutes = (model$estimate[["b_data_realtime"]] / model$estimate[["b_tt"]]) * 60
-
-# Display the result
 cat("The value of not sharing real-time data, in terms of equivalent minutes of travel time:", VTT_realtime_in_minutes, "minutes\n")
 
-# Calculate the Value of Travel Time (VTT) equivalent in terms of minutes for anonymized data sharing
+# Value of Travel Time (VTT) equivalent in terms of minutes for anonymized data sharing
 VTT_anon_in_minutes = (model$estimate[["b_data_anon"]] / model$estimate[["b_tt"]]) * 60
-
-# Display the result
 cat("The value of not sharing anonymized occupancy data, in terms of equivalent minutes of travel time:", VTT_anon_in_minutes, "minutes\n")
