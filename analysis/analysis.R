@@ -41,8 +41,8 @@ set.seed(999)
 
 # Define attributes for each alternative for our full-factorial design for Scenario Status-Quo
 attributes <- list(
-  TravelTime_Integrated = c(20, 35, 50),
-  TravelTime_Multiple = c(20, 35, 50),         # Travel time in minutes                 
+  TravelTime_Integrated = c(20, 35, 50),      # Travel time in minutes  
+  TravelTime_Multiple = c(20, 35, 50),        # Travel time in minutes                 
   Experience_Integrated = c("Very Easy","Manageable", "Cumbersome"),
   Experience_Multiple = c("Very Easy","Manageable", "Cumbersome"),
   DataShared_Integrated = c("None", "Anonymized occupancy data", "Realtime location data"),
@@ -52,86 +52,9 @@ attributes <- list(
 # Create a full factorial design
 design <- expand.grid(attributes)
 
-# Reorder columns for better readability
-design <- design[, c("TravelTime_Integrated", "Experience_Integrated", "DataShared_Integrated", "TravelTime_Multiple", "Experience_Multiple", "DataShared_Multiple")]
-#View(design)
+# Left 243 initial choice sets after applying full factorial design
 
-# # Apply constraints to remove obvious dominant alternatives
-# design <- design %>% filter(!((TravelTime_Multiple == 20 & Experience_Multiple == 8 & DataShared_Multiple == "None") 
-#                               #| (TravelTime_Integrated == 20 & Experience_Integrated == 8 & DataShared_Integrated == "Anonymized")
-#                               #| (TravelTime_Bike == 20 & Quality_Bike == "low")))
-# 
-# # Additional constraints to avoid dominant alternatives
-# design <- design %>% filter(!(Experience_Integrated > Experience_Multiple &
-#                                 TravelTime_Integrated > TravelTime_Multiple &
-#                                 DataShared_Multiple == "high") 
-#                             #| (Experience_Integrated < Experience_Multiple &
-#                                  TravelTime_Integrated < TravelTime_Multiple &
-#                                  DataShared_Multiple == "low"))
-# 
-# # Ensure non-overlapping attribute levels
-# design <- design %>% filter(!(if_all(c(TravelTime_Integrated, TravelTime_Multiple), ~ . == first(.))))
-# design <- design %>% filter(!(if_all(c(DataShared_Integrated, DataShared_Multiple), ~ . == first(.))))
-# design <- design %>% filter(!(Experience_Integrated == Experience_Multiple))
-# 
-# # TODO: Feel free to add more constraints to make your final choice tasks better
-# 
-# # Random sampling for choice tasks with different TT for car 
-# # Choose the 6 tasks that are most realistic and have the highest trade-off
-# choice_set_status_quo <- rbind(
-#   sample_n(subset(design, TravelTime_Integrated == 10), 3),
-#   sample_n(subset(design, TravelTime_Integrated == 15), 3),
-#   sample_n(subset(design, TravelTime_Integrated == 20), 3)
-# )
-# #View(choice_set_status_quo)
-
-# ## Choice-tasks for Scenario 2 (City Toll Car)
-# 
-# attributes_toll <- list(
-#   TravelTime_Integrated = c(10, 15, 20),    
-#   TravelTime_Multiple = c(10, 15, 20),         # Travel time in minutes
-#   Experience_Integrated = c(10, 12, 14),               # More expensive due to the city toll
-#   Experience_Multiple = c(4, 6, 8),                  # Cost in euros
-#   DataShared_Integrated = c("medium", "high"),
-#   DataShared_Multiple = c("low", "medium", "high")         # Service quality
-# )
-# 
-# # Create a full factorial design
-# design_toll <- expand.grid(attributes_toll)
-# 
-# # Reorder columns for better readability
-# design_toll <- design_toll[, c("TravelTime_Integrated", "Experience_Integrated", "DataShared_Integrated", "TravelTime_Multiple", "Experience_Multiple", "DataShared_Multiple")]
-# #View(design_toll)
-# 
-
-# # NOT USED FROM HERE ON
-# # Apply constraints to remove obvious dominant alternatives
-# design_toll <- design_toll %>% filter(!((TravelTime_Multiple == 20 & Experience_Multiple == 14 & DataShared_Multiple == "low") 
-#                                         # (TravelTime_Integrated == 20 & Experience_Integrated == 14 & DataShared_Integrated == "medium")))
-# 
-# # Additional constraints to avoid dominant alternatives
-# design_toll <- design_toll %>% filter(!(Experience_Integrated > Experience_Multiple &
-#                                           TravelTime_Integrated > TravelTime_Multiple &
-#                                           DataShared_Multiple == "high")) 
-# 
-# # Ensure non-overlapping attribute levels
-# design_toll <- design_toll %>% filter(!(if_all(c(TravelTime_Integrated, TravelTime_Multiple, TravelTime_Bike), ~ . == first(.))))
-# design_toll <- design_toll %>% filter(!(if_all(c(DataShared_Integrated, DataShared_Multiple, Quality_Bike), ~ . == first(.))))
-# 
-# # TODO: Feel free to add more constraints to make your final choice tasks better
-# 
-# # Random sampling for choice tasks with different cost for car 
-# # Choose the 6 tasks that are most realistic and have the highest trade-off
-# choice_set_toll <- rbind(
-#   sample_n(subset(design_toll, Experience_Integrated == 10), 3),
-#   sample_n(subset(design_toll, Experience_Integrated == 12), 3),
-#   sample_n(subset(design_toll, Experience_Integrated == 14), 3)
-# )
-# #View(choice_set_toll)
-# 
-# # Selected choices
-# status_quo <- choice_set_status_quo[c(7, 5, 8), ]
-# city_toll <-  choice_set_toll[c(1, 5, 8), ]
+# Final choice sets after applying all constraints and exclusions (See Section 2.2 of the research paper):
 
 choice_set<- c("S1_2035_EM_AN", "S1_2035_EM_RN", "S1_2035_EC_AN", "S1_2035_EC_RN", "S1_2035_MM_AN", "S1_2035_MM_RN", "S1_2050_EM_AN", "S1_2050_EM_RN", "S1_2050_EC_AN", "S1_2050_EC_RN", "S1_2050_MM_AN", "S1_2050_MM_RN", "S1_3535_EM_AN", "S1_3535_EC_AN", "S1_3535_EM_RN", "S1_3535_EC_RN",   #Scenario 1
                "S2_2035_EM_AN", "S2_2035_EM_RN", "S2_2035_EC_AN", "S2_2035_EC_RN", "S2_2035_MM_AN", "S2_2035_MM_RN", "S2_2050_EM_AN", "S2_2050_EM_RN", "S2_2050_EC_AN", "S2_2050_EC_RN", "S2_2050_MM_AN", "S2_2050_MM_RN", "S2_3535_EM_AN", "S2_3535_EC_AN", "S2_3535_EM_RN", "S2_3535_EC_RN")   #Scenario 2)
@@ -146,8 +69,6 @@ library(ggplot2)
 library(dplyr)
 
 # Load data
-my_data <- read.csv("city_toll_example.csv")
-
 my_data <- read.csv("latest_data.csv")
 
 which(names(my_data) == "")
@@ -159,70 +80,39 @@ my_data <- my_data %>% mutate(id = row_number()) # Keep a user ID, because users
 # Select only the rows where consent was given
 my_data <- my_data[my_data$Consent == 1, ]
 
-# # Scenario 1
-# # Enrich the data for the first question in Scenario 1
-# S1_Q1_target <- "S1_2035_EM_AN"
-# 
-# # Filter out the question columns that are not the target
-# S1_Q1 <- my_data %>%
-#   select(-all_of(setdiff(choice_set, S1_Q1_target)))
-# 
-# # Rename the target column to "Choice"
-# S1_Q1 <- S1_Q1 %>%
-#   rename(Choice = !!sym(S1_Q1_target))
-# 
-# # Add additional columns for Choice_Task and Scenario
-# S1_Q1$TravelTime_Integrated <- 20
-# S1_Q1$TravelTIme_Multiple <- 35
-# S1_Q1$Experience_Integrated <- "Very Easy"
-# S1_Q1$Experience_Multiple <- "Manageable"
-# S1_Q1$DataShared_Integrated <- "Anonymized occupancy data"
-# S1_Q1$DataShared_Multiple <- "None"
-# 
-# S1_Q1$Choice_Task <- 1
-# S1_Q1$Scenario <- 1
-# 
-# # Enrich the data for the second question
-# S1_Q2 <- my_data %>% select(-X1_Q_1, -X1_Q_3, -X2_Q_1, -X2_Q_2, -X2_Q_3)
-# S1_Q2 <- S1_Q2 %>%
-#   rename(Choice = X1_Q_2) %>% 
-#   bind_cols(as.data.frame(lapply(status_quo[2, ], rep, nrow(S1_Q2)))) 
-# S1_Q2$Choice_Task <- 2
-# S1_Q2$Scenario <- 1
-# 
-# # Enrich the data for the third question
-# S1_Q3 <- my_data %>% select(-X1_Q_1, -X1_Q_2, -X2_Q_1, -X2_Q_2, -X2_Q_3)
-# S1_Q3 <- S1_Q3 %>%
-#   rename(Choice = X1_Q_3) %>%
-#   bind_cols(as.data.frame(lapply(status_quo[3, ], rep, nrow(S1_Q3))))
-# S1_Q3$Choice_Task <- 3
-# S1_Q3$Scenario <- 1
-# 
-# # Scenario 2
-# # Enrich the data for the first question in Scenario 2
-# S2_Q1 <- my_data %>% select(-X1_Q_1, -X1_Q_2, -X1_Q_3, -X2_Q_2, -X2_Q_3)
-# S2_Q1 <- S2_Q1 %>%
-#   rename(Choice = X2_Q_1) %>%
-#   bind_cols(as.data.frame(lapply(city_toll[1, ], rep, nrow(S2_Q1))))
-# S2_Q1$Choice_Task <- 4
-# S2_Q1$Scenario <- 2
-# 
-# # Enrich the data for the second question 
-# S2_Q2 <- my_data %>% select(-X1_Q_1, -X1_Q_2, -X1_Q_3, -X2_Q_1, -X2_Q_3)
-# S2_Q2 <- S2_Q2 %>%
-#   rename(Choice = X2_Q_2) %>%
-#   bind_cols(as.data.frame(lapply(city_toll[2, ], rep, nrow(S2_Q2))))
-# S2_Q2$Choice_Task <- 5
-# S2_Q2$Scenario <- 2
-# 
-# # Enrich the data for the third question 
-# S2_Q3 <- my_data %>% select(-X1_Q_1, -X1_Q_2, -X1_Q_3, -X2_Q_1, -X2_Q_2)
-# S2_Q3 <-  S2_Q3 %>%
-#   rename(Choice = X2_Q_3) %>%
-#   bind_cols(as.data.frame(lapply(city_toll[3, ], rep, nrow(S2_Q3))))
-# S2_Q3$Choice_Task <- 6
-# S2_Q3$Scenario <- 2
 
+
+##### Descriptive/ Summary statistics for preliminary questions
+
+# Example: Plot age distribution, Answer numbers sourced from "Umkodierungswerte" in Qualtrics
+age_plot <- my_data %>%
+  mutate(Age_Label = recode(Age,
+                            `1` = "18-25",
+                            `2` = "25-35",
+                            `3` = "35-45",
+                            `11` = "45-55",
+                            `13` = "55-65",
+                            `4` = "65-75",
+                            `14` = "75+",
+                            `7` = "Prefer Not To Anwser"
+  ))
+
+
+# Create a bar plot for age distribution with custom labels
+ggplot(age_plot, aes(x = Age_Label)) +
+  geom_bar(fill = "skyblue") +
+  theme_minimal() +
+  labs(title = "Age Distribution",
+       x = "Age Group",
+       y = "Count") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+
+###### DATA ENRICHING
+
+### Example for my abbreviation schema for choice sets: S1_2035_EM_AN
+# The infer_values function is custom built to resolve my abbreviation schema from code (from choice set/question) to label (for example A -> Data_shared_integrated ="Anonymized occupancy data")
 
 infer_values <- function(target) {
   scenario <- substr(target, 1, 2)  # S1 or S2
@@ -237,21 +127,21 @@ infer_values <- function(target) {
   data_code <- substr(target, 12, 13)  # N, A, or R
   print(data_code)
   
-  # Infer experience values
+  # Infer route planning experience values from my abbreviation schema
   experience_integrated <- ifelse(substr(experience_code, 1, 1) == "E", "Very Easy",
                                   ifelse(substr(experience_code, 1, 1) == "M", "Manageable", "Cumbersome"))
   experience_multiple <- ifelse(substr(experience_code, 2, 2) == "E", "Very Easy",
                                 ifelse(substr(experience_code, 2, 2) == "M", "Manageable", "Cumbersome"))
   
   
-  # Infer data sharing values
+  # Infer data sharing values from my abbreviation schema
   data_shared_integrated <- ifelse(substr(data_code, 1, 1) == "A", "Anonymized occupancy data",
                                    ifelse(substr(data_code, 1, 1) == "N", "None", "Realtime location data"))
   data_shared_multiple <- ifelse(substr(data_code, 2, 2) == "A", "Anonymized occupancy data",
                                  ifelse(substr(data_code, 2, 2) == "N", "None", "Realtime location data"))
   
   
-  # Return a list of inferred values
+  # Return list of inferred values
   list(
     TravelTime_Integrated = travel_time_integrated,
     TravelTime_Multiple = travel_time_multiple,
@@ -263,14 +153,15 @@ infer_values <- function(target) {
   )
 }
 
+#### Create the individual extended tables (for each choice set)
 # Loop through each question in the choice_set and create individual tables
 choice_task_counter <- 1
 
 for (S1_Q1_target in choice_set) {
-  # Apply the inferred values
+  # Apply inferred values from schema
   inferred_values <- infer_values(S1_Q1_target)
   
-  # Create the new table
+  # new table
   assign(S1_Q1_target, my_data %>%
            select(-all_of(setdiff(choice_set, S1_Q1_target))) %>%
            rename(Choice = !!sym(S1_Q1_target)) %>%
@@ -290,10 +181,11 @@ for (S1_Q1_target in choice_set) {
 }
 
 
-# Combine datasets
+#### Combine the extended tables for each choice set to one combined dataset
+# prepare combining
 data_frames_list <- mget(choice_set)
 
-# Combine all the data frames into one
+# Combine all tables into one
 combined_data <- bind_rows(data_frames_list)
 combined_data <- combined_data %>% arrange(id)
 
@@ -319,33 +211,6 @@ combined_data <- combined_data %>%
   )
 
 
-# TODO: Add more preprocessing and descriptive data reporting as needed
-
-# Example: Plot age distribution
-combined_data_plot <- combined_data %>%
-  mutate(Age_Label = recode(Age,
-                            `1` = "18-25",
-                            `2` = "25-35",
-                            `3` = "35-45",
-                            `4` = "45-55",
-                            `13` = "55-65",
-                            `14` = "65-75",
-                            `7` = "75+",
-                            `8` = "Prefer Not To Anwser"
-                            ))
-                          
-
-# Create a bar plot for age distribution with custom labels
-ggplot(combined_data_plot, aes(x = Age_Label)) +
-  geom_bar(fill = "skyblue") +
-  theme_minimal() +
-  labs(title = "Age Distribution",
-       x = "Age Group",
-       y = "Count") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-
-
 
 ###################################################################################
 ####   PART 3: Estimation of your MNL   ###########################################
@@ -358,6 +223,8 @@ library(apollo)
 apollo_initialise()
 
 database <- combined_data # Save your dataframe as database
+
+## Remove NAs (when no alternative was chosen for a given choice task, i did not prevent this in qualtrics)
 database$Choice <- ifelse(database$Choice == "", NA, database$Choice)
 database <- database %>% filter(!is.na(Choice))
 
@@ -368,18 +235,11 @@ database <- database %>% filter(!is.na(Choice))
 apollo_control = list(
   modelName       = "Model_Basic",
   modelDescr      = "Basic MNL model",
-  indivID         = "id",   # Change this variable to your id
+  indivID         = "id",   # Change this variable to your id (stayed at id)
   nCores          = 1,
   outputDirectory = "output"
 )
 
-# ################################################################# #
-#### Load data                                                   ####
-# ################################################################# #
-
-# ################################################################# #
-#### Define model parameters                                    ####
-# ################################################################# #
 
 # ################################################################# #
 #### Define model parameters                                    ####
@@ -387,10 +247,10 @@ apollo_control = list(
 
 ### Vector of parameters, including any that are kept fixed in estimation
 apollo_beta = c(
-  asc_integrated_commuteleisure   = 0,  # ASC for Integrated Route Planner in the default scenario (Commute/Leisure)
-  asc_integrated_business = 0, # Additional shift for Business scenario
+  asc_integrated_commuteleisure   = 0,  # ASC for Integrated Route Planner in the default scenario
+  asc_integrated_business = 0, # ASC for Integrated Route Planner in Business scenario
   asc_multiple_commuteleisure   = 0,    # ASC for Multiple Route Planners in the default scenario
-  asc_multiple_business = 0,  # Additional shift for Business scenario
+  asc_multiple_business = 0,  # ASC for Multiple Route Planners in Business scenario
   b_tt      = 0,         # Coefficient for Travel Time
   b_experience  = 0,     # Coefficient for Experience (e.g., Very Easy -> Cumbersome)
   b_data_none  = 0,      # Coefficient for Data Shared = None
@@ -416,7 +276,7 @@ apollo_probabilities = function(apollo_beta, apollo_inputs, functionality = "est
   ### Create list of probabilities P
   P = list()
   
-  ### Include shifts for overall purpose of the trip (Commute/Leisure vs Business Trip Scenario)
+  ### Include shifts for purpose of the trip (Commute/Leisure vs Business Trip Scenario)
   asc_integrated = asc_integrated_commuteleisure + asc_integrated_business * (Scenario == 2)
   asc_multiple   = asc_multiple_commuteleisure + asc_multiple_business * (Scenario == 2)
   
